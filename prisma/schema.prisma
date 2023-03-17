@@ -1,0 +1,156 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  status EventStatus @default(OPEN)
+  openingDate DateTime
+  endingDate DateTime
+  openingHour String
+  endingHour String
+  address EventAddress?
+  description String
+  image EventImage?
+  ticket Ticket[]
+  producer User @relation(fields: [producerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  producerId String @db.ObjectId
+}
+
+model Ticket {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  eventId String @db.ObjectId
+  title String
+  description String?
+  price Float?
+  quantity Int
+  openingDate DateTime
+  endingDate DateTime
+  openingHour String
+  endingHour String
+  subscription Subscription[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Subscription {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @db.ObjectId
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ticketId String @db.ObjectId
+  payment Payment? @relation(fields: [paymentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  paymentId String? @db.ObjectId @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Payment {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  type String
+  subscription Subscription?
+  status PaymentStatus @default(OPEN)
+  method String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model User {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  photoUrl UserImage?
+  name  String
+  role Role @default(USER)
+  rg String @unique
+  cpf String @unique
+  birth DateTime
+  phoneNumber String
+  email String
+  address UserAddress[]
+  subcription Subscription[]
+  events Event[]
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+ 
+}
+
+model EventImage {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  key String @unique
+  url String
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  eventId String @db.ObjectId @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model UserImage {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  key String @unique
+  url String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @db.ObjectId @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model EventAddress {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  place String
+  complement String?
+  district String
+  city String
+  state String
+  zip_code String
+  event   Event   @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  eventId String @db.ObjectId @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+
+}
+
+model UserAddress {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  place String
+  complement String?
+  district String
+  city String
+  state String
+  zip_code String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+
+}
+
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum EventStatus {
+  OPEN
+  CLOSED
+  PROGRESS
+}
+
+enum PaymentStatus {
+  PAID
+  OPEN
+  TOMATCH
+}

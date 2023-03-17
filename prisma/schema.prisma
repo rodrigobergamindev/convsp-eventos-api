@@ -70,6 +70,7 @@ model User {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   photoUrl UserImage?
   name  String
+  surname String
   role Role @default(USER)
   rg String @unique
   cpf String @unique

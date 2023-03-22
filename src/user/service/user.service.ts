@@ -1,12 +1,16 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Prisma, PrismaService, User } from 'src/prisma/module';
+import { CreateUserDTO } from '../dto/CreateUserDTO';
+import { UpdateUserDTO } from '../dto/UpdateUserDTO';
 
 @Injectable()
 export class UserService {
 
     constructor(private readonly prisma: PrismaService, private readonly configService: ConfigService) {}
 
+
+    /**FIND */
     
     async findAll(): Promise<User[]>{
         const users = await this.prisma.user.findMany()
@@ -76,4 +80,60 @@ export class UserService {
         }
 
    
+    /*POST*/
+
+    async create(data: CreateUserDTO): Promise<void> {
+
+        try {
+          const createUser = await this.prisma.user.create({
+            data: {
+              ...data
+            }
+           })
+        } catch (error) {
+          if(error instanceof Prisma.PrismaClientKnownRequestError) {
+              throw new HttpException(`${error.code}`, HttpStatus.BAD_REQUEST)
+          }
+        }
+      
+         
+       }
+
+      async update(id: string, data: UpdateUserDTO): Promise<void> {
+     
+        try {
+          const updateUser = await this.prisma.user.update({
+            where: {
+              id: id
+            },
+            data: {
+              ...data
+            }
+          })
+        } catch (error) {
+          if(error instanceof Prisma.PrismaClientKnownRequestError) {
+            throw new HttpException(`${error.code}`, HttpStatus.BAD_REQUEST)
+        }
+        }
+        
+        
+      }
+
+      async delete(id: string): Promise<void> {
+      
+        try {
+          const deleteUser = await this.prisma.user.delete({
+            where: {
+              id
+            }
+          })
+  
+        } catch (error) {
+          if(error instanceof Prisma.PrismaClientKnownRequestError) {
+            throw new HttpException(`${error.code}`, HttpStatus.FORBIDDEN)
+        }
+        }
+  
+      }
+
 }

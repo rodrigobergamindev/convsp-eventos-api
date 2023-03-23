@@ -93,11 +93,10 @@ export class UserController {
  
  
     /*UPDATE ADDRESS*/
-     @Put('address/:userAddressId/:userId')
+     @Put('address/:userAddressId')
      @UsePipes(ValidationPipe)
          async updateAddress(
                @Param('userAddressId', UserAddressValidationExistPipe) userAddressId: string,
-               @Param('userId', UserValidationExistPipe) userId: string,
                @Body() data: UpdateUserAddressDTO 
          ): Promise<void>{
                     await this.userService.updateUserAddress(userAddressId, data)

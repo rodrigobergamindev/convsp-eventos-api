@@ -98,7 +98,7 @@ model User {
   birth DateTime
   phoneNumber String
   email String @unique
-  address UserAddress[]
+  address UserAddress?
   subcription Subscription[]
   events Event[]
  
@@ -143,7 +143,7 @@ model UserAddress {
   state String
   zip_code String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String @db.ObjectId
+  userId String @unique @db.ObjectId 
 
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt

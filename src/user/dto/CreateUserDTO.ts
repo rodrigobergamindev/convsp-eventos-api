@@ -2,7 +2,7 @@
 import {
     Prisma, Role, UserType,
   } from '@prisma/client';
-import { IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber, IsUrl } from 'class-validator'
+import { IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber} from 'class-validator'
 
 
 
@@ -38,7 +38,7 @@ export class CreateUserDTO implements Prisma.UserCreateInput {
   readonly email: string;
  
   @IsNotEmpty()
-  readonly address: Prisma.UserAddressCreateNestedManyWithoutUserInput;
+  readonly address: Prisma.UserAddressCreateNestedOneWithoutUserInput;
 
   @IsOptional()
   readonly subscription?: Prisma.SubscriptionCreateNestedManyWithoutUserInput;

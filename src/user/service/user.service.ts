@@ -1,9 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Prisma, PrismaService, User, UserAddress } from 'src/prisma/module';
-import { CreateUserAddressDTO } from '../dto/CreateUserAddressDTO';
 import { CreateUserDTO } from '../dto/CreateUserDTO';
-import { UpdateUserAddressDTO } from '../dto/UpdateUserAddressDTO';
 import { UpdateUserDTO } from '../dto/UpdateUserDTO';
 
 @Injectable()
@@ -16,7 +14,7 @@ export class UserService {
     
     async findAll(): Promise<User[]>{
         const users = await this.prisma.user.findMany()
-      
+    
         return users
         }
 
@@ -30,7 +28,6 @@ export class UserService {
               },
               include: {
                 address: true,
-                events: true,
                 subcription: true
               }
             })
@@ -65,7 +62,6 @@ export class UserService {
               },
               include: {
                 address: true,
-                events: true,
                 subcription: true
               }
             })
@@ -84,24 +80,31 @@ export class UserService {
    
     /*CREATE*/
 
-    async create(data: CreateUserDTO): Promise<void> {
+      async create(data: CreateUserDTO): Promise<void> {
 
+     
         try {
-          const createUser = await this.prisma.user.create({
-            data: {
-              ...data
+    
+        const createUser = await this.prisma.user.create({
+          data: {
+            ...data,
+            address: {
+              create: data.address as Prisma.UserAddressCreateWithoutUserInput
             }
-           })
-        } catch (error) {
-          if(error instanceof Prisma.PrismaClientKnownRequestError) {
-              throw new HttpException(`${error.code}`, HttpStatus.BAD_REQUEST)
-          }
+            }
+          })
+           
+        } catch (error) { 
+            if(error){
+              throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
+            }
+          
         }
       
-         
+          
        }
 
-      /*UPDATE*/
+      /*UPDATE*/ 
 
       async update(id: string, data: UpdateUserDTO): Promise<void> {
      
@@ -143,67 +146,16 @@ export class UserService {
       }
 
 
-      /*ADDRESS*/
+      /*FIND ADDRESS*/
 
-      async createUserAddress(userId: string, data: CreateUserAddressDTO): Promise<void> {
+      async findUserAddress(id: string): Promise<UserAddress> {
 
-        try {
-          const createAddress = await this.prisma.userAddress.create({
-            data: {
-              ...data,
-              user: {
-                connect: {
-                  id: userId
-                }
-              }
-            }
-          })
-        } catch (error) {
-          if(error instanceof Prisma.PrismaClientKnownRequestError) {
-            throw new HttpException(`${error.code}`, HttpStatus.BAD_REQUEST)
+        const address = await this.prisma.userAddress.findUnique({
+          where: {
+            id
           }
-        }
-        
-      }
-  
-      async updateUserAddress(userAddressId: string, data: UpdateUserAddressDTO): Promise<void> {
-  
-          try {
-            const updateAddress = await this.prisma.userAddress.update({
-              where: {
-                id: userAddressId
-              },
-              data: {
-                ...data
-              }
-            })
-          } catch (error) {
-            if(error instanceof Prisma.PrismaClientKnownRequestError) {
-              throw new HttpException(`${error.code}`, HttpStatus.BAD_REQUEST)
-            }
-          }
-          
-          
-      }
-   
-      async findUserAddress(userAddressId: string): Promise<UserAddress> {
-  
-        try {
-          const userAddress = await this.prisma.userAddress.findUnique({
-            where: {
-              id: userAddressId
-            }
-          })
-    
-          return userAddress
-        } catch (error) {
-          if(error instanceof Prisma.PrismaClientKnownRequestError) {
-            throw new HttpException(`${error.code}`, HttpStatus.NOT_FOUND)
-          }
-  
-        }
-  
-        
-      }
+        })
 
+        return address
+      }
 }

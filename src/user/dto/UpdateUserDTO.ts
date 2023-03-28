@@ -1,6 +1,6 @@
 
 import {
-    Prisma, Role, UserType,
+    Prisma, UserType,
   } from '@prisma/client';
 import { IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber} from 'class-validator'
 
@@ -10,16 +10,10 @@ export class UpdateUserDTO implements Prisma.UserUpdateInput {
 
   @IsNotEmpty()
   readonly name: string;
-
-  @IsNotEmpty()
-  readonly surname: string;
   
   @IsOptional()
   readonly type: UserType;
-
-  @IsNotEmpty()
-  readonly role: Role;
-
+  
   @IsNotEmpty()
   readonly rg: string;
 
@@ -38,7 +32,7 @@ export class UpdateUserDTO implements Prisma.UserUpdateInput {
   readonly email: string;
 
   @IsNotEmpty()
-  readonly address: Prisma.UserAddressCreateNestedManyWithoutUserInput;
+  readonly address: Prisma.UserAddressUpdateOneWithoutUserNestedInput;
 
   @IsOptional()
   readonly subscription?: Prisma.SubscriptionCreateNestedManyWithoutUserInput;

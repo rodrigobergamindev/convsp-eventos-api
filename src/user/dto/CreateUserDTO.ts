@@ -1,6 +1,6 @@
 
 import {
-    Prisma, Role, UserType,
+    Prisma, UserType,
   } from '@prisma/client';
 import { IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber} from 'class-validator'
 
@@ -10,15 +10,9 @@ export class CreateUserDTO implements Prisma.UserCreateInput {
 
   @IsNotEmpty()
   readonly name: string;
-
-  @IsNotEmpty()
-  readonly surname: string;
   
   @IsOptional()
   readonly type: UserType;
-
-  @IsNotEmpty()
-  readonly role: Role;
 
   @IsNotEmpty()
   readonly rg: string;

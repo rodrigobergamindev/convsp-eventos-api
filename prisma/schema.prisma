@@ -22,7 +22,7 @@ model Event {
   description String
   image EventImage?
   ticket Ticket[]
-  producer User @relation(fields: [producerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  producer Producer @relation(fields: [producerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   producerId String @db.ObjectId
 }
 
@@ -31,8 +31,8 @@ model Ticket {
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   eventId String @db.ObjectId
   title String 
-  description String?
-  price Float?
+  description String
+  price Float
   quantity Int
   openingDate DateTime
   endingDate DateTime
@@ -45,21 +45,6 @@ model Ticket {
   @@unique([eventId, title])
 }
 
-model Partner {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-  surname String
-  rg String @unique
-  cpf String @unique
-  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  subscriptionId String @db.ObjectId
-  email String
-  phoneNumber String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime? @updatedAt
-
-}
 
 model Subscription {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
@@ -72,8 +57,6 @@ model Subscription {
   parter Partner[]
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt
-
-  
 }
 
 model Payment {
@@ -87,11 +70,23 @@ model Payment {
   updatedAt DateTime? @updatedAt
 }
 
+model Producer {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  department String
+  name  String
+  birth DateTime
+  phoneNumber String
+  email String @unique
+  events Event[]
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+ 
+}
+
 model User {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   name  String
-  surname String
-  role Role @default(USER)
   type UserType @default(MEMBRO)
   rg String @unique
   cpf String @unique
@@ -100,11 +95,26 @@ model User {
   email String @unique
   address UserAddress?
   subcription Subscription[]
-  events Event[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt
  
+}
+
+model Partner {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  rg String @unique
+  cpf String @unique
+  birth DateTime
+  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  subscriptionId String @db.ObjectId
+  email String
+  phoneNumber String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
+
 }
 
 model EventImage {
@@ -151,10 +161,6 @@ model UserAddress {
 }
 
 
-enum Role {
-  ADMIN
-  USER
-}
 
 enum UserType {
   MEMBRO
@@ -176,5 +182,6 @@ enum EventStatus {
 enum PaymentStatus {
   PAID
   OPEN
+  CANCELED
   TOMATCH
 }

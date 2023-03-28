@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "0e167e7f-6fdc-40d9-92ea-dd60fe7e021d",
-		"name": "convsp-backend",
+		"name": "convsp-eventos-backend",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -79,7 +79,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Rodrigo\",\r\n    \"surname\": \"Bergamin\",\r\n    \"type\":\"MEMBRO\"\r\n}",
+							"raw": "{\r\n    \"name\":\"Rodrigo Bergamin Guimarães da Silva\",\r\n    \"type\":\"MEMBRO\",\r\n    \"rg\":\"532456063\",\r\n    \"cpf\":\"45177620840\",\r\n    \"birth\":\"2023-01-30T23:10:50Z\",\r\n    \"phoneNumber\": \"11959943034\",\r\n    \"email\":\"rb.bergamin@gmail.com\",\r\n    \"address\": {\r\n        \"place\":\"Rua Francisco Rodrigues Seckler, 111\",\r\n        \"complement\": \"83B\",\r\n        \"district\":\"Itaquera\",\r\n        \"city\":\"São Paulo\",\r\n        \"state\":\"São Paulo\",\r\n        \"zip_code\":\"08230-020\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -87,13 +87,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/api/workers",
+							"raw": "{{host}}/api/users",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"workers"
+								"users"
 							]
 						}
 					},
@@ -105,13 +105,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/api/workers",
+							"raw": "{{host}}/api/users",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"workers"
+								"users"
 							]
 						}
 					},
@@ -123,15 +123,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/api/workers/id/63fdf766c0489c63e770cd4a",
+							"raw": "{{host}}/api/users/id/642344ae22856f3c88b9e858",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"workers",
+								"users",
 								"id",
-								"63fdf766c0489c63e770cd4a"
+								"642344ae22856f3c88b9e858"
 							]
 						}
 					},
@@ -178,38 +178,19 @@
 					"response": []
 				},
 				{
-					"name": "generateCode",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/api/workers/generateCode",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"workers",
-								"generateCode"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "delete",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/api/workers/63e28cf63c19839fc5d2a677",
+							"raw": "{{host}}/api/users/642344ae22856f3c88b9e858",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"workers",
-								"63e28cf63c19839fc5d2a677"
+								"users",
+								"642344ae22856f3c88b9e858"
 							]
 						}
 					},

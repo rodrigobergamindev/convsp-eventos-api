@@ -22,7 +22,7 @@ model Event {
   description String
   image EventImage?
   ticket Ticket[]
-  producer Producer @relation(fields: [producerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  producer User @relation(fields: [producerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   producerId String @db.ObjectId
 }
 
@@ -70,32 +70,19 @@ model Payment {
   updatedAt DateTime? @updatedAt
 }
 
-model Producer {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  department String
-  name  String
-  birth DateTime
-  phoneNumber String
-  email String @unique
-  events Event[]
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime? @updatedAt
- 
-}
-
 model User {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   name  String
   type UserType @default(MEMBRO)
+  role UserRole @default(USER)
   rg String @unique
   cpf String @unique
   birth DateTime
   phoneNumber String
   email String @unique
   address UserAddress?
-  subcription Subscription[]
- 
+  subcriptions Subscription[]
+  events Event[]
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt
  
@@ -171,6 +158,12 @@ enum UserType {
   EVANGELISTA
   MISSIONARIO
   OUTRO
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  PRODUCER
 }
 
 enum EventStatus {

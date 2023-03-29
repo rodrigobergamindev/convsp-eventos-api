@@ -7,13 +7,20 @@ import { UpdateUserDTO } from '../dto/UpdateUserDTO';
 @Injectable()
 export class UserService {
 
-    constructor(private readonly prisma: PrismaService, private readonly configService: ConfigService) {}
+    constructor(private readonly prisma: PrismaService, 
+      private readonly configService: ConfigService) {}
 
 
     /**FIND */
     
     async findAll(): Promise<User[]>{
-        const users = await this.prisma.user.findMany()
+        const users = await this.prisma.user.findMany({
+          include: {
+            address: true,
+            subcriptions: true,
+            events: true
+          }
+        })
     
         return users
         }
@@ -28,14 +35,16 @@ export class UserService {
               },
               include: {
                 address: true,
-                subcription: true
+                subcriptions: true,
+                events: true
               }
             })
           
             return user 
+            
           } catch (error) {
-            if(error instanceof Prisma.PrismaClientKnownRequestError) {
-              throw new HttpException(`${error.code}`, HttpStatus.NOT_FOUND)
+            if(error) {
+              throw new HttpException(`${error}`, HttpStatus.NOT_FOUND)
             }
           }
       
@@ -62,15 +71,16 @@ export class UserService {
               },
               include: {
                 address: true,
-                subcription: true
+                subcriptions: true,
+                events: true
               }
             })
           
             return user
 
           } catch (error) {
-            if(error instanceof Prisma.PrismaClientKnownRequestError) {
-              throw new HttpException(`${error.code}`, HttpStatus.NOT_FOUND)
+            if(error) {
+              throw new HttpException(`${error}`, HttpStatus.NOT_FOUND)
             }
           }
       
@@ -114,12 +124,15 @@ export class UserService {
               id: id
             },
             data: {
-              ...data
+              ...data,
+              address: {
+                update: data.address as Prisma.UserAddressUpdateWithoutUserInput
+              }
             }
           })
         } catch (error) {
-          if(error instanceof Prisma.PrismaClientKnownRequestError) {
-            throw new HttpException(`${error.code}`, HttpStatus.BAD_REQUEST)
+          if(error) {
+            throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
         }
         }
         
@@ -136,10 +149,10 @@ export class UserService {
               id
             }
           })
-  
+   
         } catch (error) {
-          if(error instanceof Prisma.PrismaClientKnownRequestError) {
-            throw new HttpException(`${error.code}`, HttpStatus.FORBIDDEN)
+          if(error) {
+            throw new HttpException(`${error}`, HttpStatus.FORBIDDEN)
         }
         }
   

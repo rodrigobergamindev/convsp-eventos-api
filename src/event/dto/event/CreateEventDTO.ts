@@ -12,8 +12,8 @@ export class CreateEventDTO implements Prisma.EventCreateInput {
     @IsNotEmpty()
     readonly title: string;
 
-    @IsNotEmpty()
-    readonly status: EventStatus;
+    @IsOptional()
+    readonly status?: EventStatus;
 
     @IsNotEmpty()
     readonly openingDate: Date;
@@ -33,7 +33,7 @@ export class CreateEventDTO implements Prisma.EventCreateInput {
     @IsNotEmpty()
     readonly description: string;
 
-    @IsNotEmpty()
+    
     readonly producer: Prisma.UserCreateOrConnectWithoutEventsInput;
 
 }

@@ -95,13 +95,13 @@ export class EventService {
 
 
      /*UPDATE*/
-     async update(data: UpdateEventDTO, eventId: string): Promise<void> {
+     async update(data: UpdateEventDTO, id: string): Promise<void> {
 
       try {
   
       const updateEvent = await this.prisma.event.update({
         where: {
-          id: eventId
+          id
         },
         data: {
           ...data,
@@ -203,7 +203,7 @@ export class EventService {
       async deleteFile(file: string): Promise<void> {
   
         try {
-          
+        
             const s3 = new S3()
     
             const deleteResult = await s3.deleteObject({

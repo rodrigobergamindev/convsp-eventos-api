@@ -20,4 +20,5 @@ export class UpdateTicketDTO implements Prisma.TicketUpdateInput {
     @IsNotEmpty()
     readonly quantity: number;
 
+
 }

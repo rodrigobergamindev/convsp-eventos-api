@@ -11,7 +11,7 @@ export class CreateTicketDTO implements Prisma.TicketCreateInput {
     @IsNotEmpty()
     readonly title: string;
 
-    @IsNotEmpty()
+    @IsOptional()
     readonly event: Prisma.EventCreateNestedOneWithoutTicketInput;
 
     @IsNotEmpty()

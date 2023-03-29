@@ -7,7 +7,7 @@ import { CreateEventDTO } from '../dto/event/CreateEventDTO';
 import { EventValidationExistPipe } from '../pipes/event/EventValidationPipe';
 import { UploadedFile, UseInterceptors } from '@nestjs/common/decorators';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
-import { TicketValidationAlreadyExistPipe, TicketValidationExistPipe } from '../pipes/ticket/TicketValidationPipe';
+import { TicketValidationExistPipe } from '../pipes/ticket/TicketValidationPipe';
 import { CreateTicketDTO } from '../dto/ticket/CreateTicketDTO';
 import { UpdateEventDTO } from '../dto/event/UpdateEventDTO';
 import { UpdateTicketDTO } from '../dto/ticket/UpdateTicketDTO';
@@ -40,7 +40,7 @@ export class EventController {
 
       /*CREATE*/
 
-      @Post()
+      @Post(':producerId')
       @UsePipes(ValidationPipe)
           async create(
             @Param('producerId', UserValidationExistPipe) producerId: string, 
@@ -56,9 +56,9 @@ export class EventController {
       @Put(':id')
       @UsePipes(ValidationPipe)
       async update(
-            @Param('eventId', EventValidationExistPipe) eventId: string, 
+            @Param('id', EventValidationExistPipe) id: string, 
             @Body() data: UpdateEventDTO): Promise<void>{
-                 await this.eventService.update(data, eventId)
+                 await this.eventService.update(data, id)
           }
       
       
@@ -83,29 +83,29 @@ export class EventController {
 
     }
 
-    @Delete(':id/deleteFiles')
+    @Delete(':id/deleteFile')
     async deleteFile(
         @Param('id', EventValidationExistPipe) id: string, 
-        @Body() file: string): Promise<void> {
-            await this.eventService.deleteFile(file)
+        @Body() data: any): Promise<void> {
+            await this.eventService.deleteFile(data.file)
 
     }
 
 
     /*CREATE TICKET*/
 
-    @Post('ticket')
-      @UsePipes(ValidationPipe, TicketValidationAlreadyExistPipe)
+    @Post(':eventId/ticket')
+      @UsePipes(ValidationPipe)
           async createTicket( 
-              @Body() data: CreateTicketDTO, eventId: string): Promise<void>{
-                  
-                 await this.eventService.createTicket(data, eventId)
+                @Param('eventId', EventValidationExistPipe) eventId: string,
+              @Body() data: CreateTicketDTO): Promise<void>{
+                  await this.eventService.createTicket(data, eventId)
                         
           }
       
 
-    /*UPDATE EVENT*/
-          @Put('ticket/:id')
+    /*UPDATE TICKET*/
+          @Put('ticket/:ticketId')
           @UsePipes(ValidationPipe)
           async updateTicket(
                 @Param('ticketId', TicketValidationExistPipe) ticketId: string, 
@@ -114,7 +114,7 @@ export class EventController {
               }
           
           
-    /*DELETE EVENT*/
+    /*DELETE TICKET*/
           @Delete('ticket/:id')
           async deleteTicket(
               @Param('id', TicketValidationExistPipe) id : string): Promise<void> {

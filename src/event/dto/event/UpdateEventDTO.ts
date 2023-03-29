@@ -1,7 +1,7 @@
 
 import {
     EventStatus,
-    Prisma, UserType,
+    Prisma
   } from '@prisma/client';
 import { IsNotEmpty, IsOptional} from 'class-validator'
 
@@ -32,8 +32,7 @@ export class UpdateEventDTO implements Prisma.EventUpdateInput {
 
     @IsNotEmpty()
     readonly description: string;
-
-    @IsNotEmpty()
-    readonly producer: Prisma.UserCreateOrConnectWithoutEventsInput;
+    
+    readonly producer: Prisma.UserUpdateOneRequiredWithoutEventsNestedInput;
 
 }

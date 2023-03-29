@@ -46,22 +46,4 @@ export class UserValidationAlreadyExistPipe implements PipeTransform {
 
 
 
-@Injectable()
-export class UserAddressValidationExistPipe implements PipeTransform {
-
-    constructor(private readonly userService: UserService){}
-
-    async transform(value: any, metadata: ArgumentMetadata) {
-    
-        if(!value){
-            throw new BadRequestException(`O valor do parâmetro ${metadata.data} deve ser informado`)
-        }
-
-        const addressExist = await this.userService.findUserAddress(value)
-        if(!addressExist) throw new NotFoundException({statusCode: 400, message: "Endereço não encontrado"})
-        
-        return value
-
-    }
-}
 

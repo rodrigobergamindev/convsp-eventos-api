@@ -34,10 +34,6 @@ model Ticket {
   description String
   price Float
   quantity Int
-  openingDate DateTime
-  endingDate DateTime
-  openingHour String
-  endingHour String
   subscription Subscription[]
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt

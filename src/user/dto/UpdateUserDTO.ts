@@ -37,10 +37,5 @@ export class UpdateUserDTO implements Prisma.UserUpdateInput {
   @IsNotEmpty()
   readonly address: Prisma.UserAddressUpdateOneWithoutUserNestedInput;
 
-  @IsOptional()
-  readonly subscription?: Prisma.SubscriptionCreateNestedManyWithoutUserInput;
-
-  @IsOptional()
-  readonly event?: Prisma.EventCreateNestedManyWithoutProducerInput;
   
 }

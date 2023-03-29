@@ -1,8 +1,13 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Event, Prisma, PrismaService } from 'src/prisma/module';
-import { CreateEventDTO } from '../dto/CreateEventDTO';
-import { UpdateEventDTO } from '../dto/UpdateEventDTO';
+import { Event, EventAddress, Prisma, PrismaService, Ticket } from 'src/prisma/module';
+import { CreateEventDTO } from '../dto/event/CreateEventDTO';
+
+import {v4 as uuid} from 'uuid'
+import { S3 } from "aws-sdk";
+import { UpdateEventDTO } from '../dto/event/UpdateEventDTO';
+import { CreateTicketDTO } from '../dto/ticket/CreateTicketDTO';
+import { UpdateTicketDTO } from '../dto/ticket/UpdateTicketDTO';
 
 @Injectable()
 export class EventService {
@@ -56,16 +61,13 @@ export class EventService {
           return event
         }
 
-
-
     /*CREATE*/
 
-    async create(data: CreateEventDTO, producerId: string): Promise<void> {
+    async create(data: CreateEventDTO, producerId: string): Promise<Event> {
 
-     
       try {
   
-      const createEvent = await this.prisma.event.create({
+      const event = await this.prisma.event.create({
         data: {
           ...data,
           address: {
@@ -75,13 +77,12 @@ export class EventService {
             connect: {
               id: producerId
             }
-          },
-          ticket: {
-            create: data.ticket as Prisma.TicketCreateWithoutEventInput
           }
           }
         })
          
+        return event
+
       } catch (error) { 
           if(error){
             throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
@@ -92,9 +93,10 @@ export class EventService {
         
      }
 
-     async update(data: UpdateEventDTO, eventId: string, producerId: string): Promise<void> {
 
-     
+     /*UPDATE*/
+     async update(data: UpdateEventDTO, eventId: string): Promise<void> {
+
       try {
   
       const updateEvent = await this.prisma.event.update({
@@ -104,15 +106,7 @@ export class EventService {
         data: {
           ...data,
           address: {
-            create: data.address as Prisma.EventAddressCreateWithoutEventInput
-          },
-          producer: {
-            connect: {
-              id: producerId
-            }
-          },
-          ticket: {
-            update: data.ticket as Prisma.TicketUpdateWithoutEventInput 
+            update: data.address as Prisma.EventAddressUpdateWithoutEventInput
           }
           }
         })
@@ -126,4 +120,230 @@ export class EventService {
     
         
      }
+
+       /*DELETE*/
+
+       async delete(id: string): Promise<void> {
+      
+        try {
+          const deleteEvent = await this.prisma.event.delete({
+            where: {
+              id
+            }
+          })
+   
+        } catch (error) {
+          if(error) {
+            throw new HttpException(`${error}`, HttpStatus.FORBIDDEN)
+        }
+        }
+  
+      }
+
+
+      /*FIND ADDRESS*/
+
+      async findEventAddress(id: string): Promise<EventAddress> {
+
+        const address = await this.prisma.eventAddress.findUnique({
+          where: {
+            id
+          }
+        })
+
+        return address
+      }
+
+
+      /*UPLOAD AND DELETE FILES*/
+
+      async fileUpload(eventId: string, file: Express.Multer.File): Promise<void>{
+
+        try {
+          
+            const s3 = new S3()
+    
+            if(file.mimetype.includes('jpeg') 
+            || file.mimetype.includes('png') 
+            || file.mimetype.includes('jpg')){
+              
+              const uploadResult = await s3.upload({
+                Bucket: this.configService.get('AWS_BUCKET_NAME'), 
+                Body: file.buffer,
+                Key: `${uuid()}-${file.originalname}`
+              }).promise()
+              
+              
+              
+              if(uploadResult.Location){
+                await this.prisma.eventImage.create({
+                  data: {
+                    key: uploadResult.Key,
+                    url: uploadResult.Location,
+                    event: {
+                      connect: {
+                        id: eventId
+                      }
+                    }
+                  }
+                })
+              }
+              
+             }
+             
+           
+        } catch (error) {
+          if(error) {
+            throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
+          }
+  
+        }
+      }
+  
+      async deleteFile(file: string): Promise<void> {
+  
+        try {
+          
+            const s3 = new S3()
+    
+            const deleteResult = await s3.deleteObject({
+              Bucket:this.configService.get('AWS_BUCKET_NAME'),
+              Key: file
+            }).promise()
+    
+            if(deleteResult) {
+              
+              const deleteFile = await this.prisma.eventImage.delete({
+                where: {
+                  key: file
+                }
+              })
+            }
+            
+        } catch (error) {
+  
+          if(error) {
+            throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
+          }
+        }
+  
+        
+      }
+
+
+      /*TICKET*/
+
+      /*FIND TICKET*/
+
+      async findAllTickets(): Promise<Ticket[]>{
+        const tickets = await this.prisma.ticket.findMany()
+    
+        return tickets
+        }
+
+
+      async findTicketById(id: string): Promise<Ticket> {
+       
+          try {
+            const ticket = await this.prisma.ticket.findUnique({
+              where: {
+                  id
+              },
+              include: {
+                event: true,
+                subscription: true
+              }
+            })
+          
+            return ticket
+            
+          } catch (error) {
+            if(error) {
+              throw new HttpException(`${error}`, HttpStatus.NOT_FOUND)
+            }
+          }
+      
+        }
+
+      async findUniqueTicket(title: string, eventId: string): Promise<Ticket> {
+        try {
+          const ticket = await this.prisma.ticket.findUnique({
+            where: {
+                eventId_title: {
+                  eventId,
+                  title
+                }
+            },
+            include: {
+              event: true,
+              subscription: true
+            }
+          })
+        
+          return ticket
+          
+        } catch (error) {
+          if(error) {
+            throw new HttpException(`${error}`, HttpStatus.NOT_FOUND)
+          }
+        }
+      }
+
+
+      /*CREATE*/
+
+      async createTicket(data: CreateTicketDTO, eventId: string): Promise<void> {
+
+        try {
+    
+        const ticket = await this.prisma.ticket.create({
+          data: {
+            ...data,
+            event: {
+              connect: {
+                id: eventId
+              }
+            }
+            }
+          })
+  
+        } catch (error) { 
+            if(error){
+              throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
+            }
+          
+        }
+      
+          
+       }
+
+       /*UPDATE*/
+
+       async updateTicket(data: UpdateTicketDTO, 
+        eventId: string): Promise<Ticket> {
+
+        try {
+    
+        const ticket = await this.prisma.ticket.update({
+          where: {
+            id: eventId
+          }
+          ,
+          data: {
+            ...data
+            }
+          })
+           
+          return ticket
+  
+        } catch (error) { 
+            if(error){
+              throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
+            }
+          
+        }
+      
+          
+       }
+
 }

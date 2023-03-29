@@ -36,11 +36,5 @@ export class CreateUserDTO implements Prisma.UserCreateInput {
  
   @IsNotEmpty()
   readonly address: Prisma.UserAddressCreateNestedOneWithoutUserInput;
-
-  @IsOptional()
-  readonly subscription?: Prisma.SubscriptionCreateNestedManyWithoutUserInput;
-
-  @IsOptional()
-  readonly event?: Prisma.EventCreateNestedManyWithoutProducerInput;
   
 }

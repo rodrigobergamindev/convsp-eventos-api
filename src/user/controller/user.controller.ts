@@ -1,5 +1,5 @@
 import { Controller, Get, NotFoundException, Param, Post, UsePipes, ValidationPipe, Body, Put, Delete } from '@nestjs/common';
-import { User, UserAddress } from '@prisma/client';
+import { User } from '@prisma/client';
 import { CreateUserDTO } from '../dto/CreateUserDTO';
 import { UpdateUserDTO } from '../dto/UpdateUserDTO';
 import { UserValidationAlreadyExistPipe, UserValidationExistPipe } from '../pipes/UserValidationPipe';

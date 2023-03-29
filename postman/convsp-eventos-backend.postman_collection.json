@@ -1,77 +1,14 @@
 {
 	"info": {
-		"_postman_id": "0e167e7f-6fdc-40d9-92ea-dd60fe7e021d",
+		"_postman_id": "398ce526-d944-4bb2-b735-ec410c5963ac",
 		"name": "convsp-eventos-backend",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7336078"
 	},
 	"item": [
 		{
 			"name": "user",
 			"item": [
-				{
-					"name": "address",
-					"item": [
-						{
-							"name": "createAddress",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n        \"type\":\"Principal\",\r\n        \"place\": \"Rua Francisco Rodrigues Seckler, 111\",\r\n        \"complement\":\"83B\",\r\n        \"district\": \"Vila Taquari\",\r\n        \"city\": \"São Paulo\",\r\n        \"state\": \"São Paulo\",\r\n        \"zip_code\":\"08230-020\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{host}}/api/workers/address/63ebd214131404c8a71e5a5a",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"api",
-										"workers",
-										"address",
-										"63ebd214131404c8a71e5a5a"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "updateAddress",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n        \"type\":\"Comercial\",\r\n        \"place\": \"Rua Francisco Rodrigues Seckler, 111\",\r\n        \"complement\":\"83B\",\r\n        \"district\": \"Vila Taquari\",\r\n        \"city\": \"São Paulo\",\r\n        \"state\": \"São Paulo\",\r\n        \"zip_code\":\"08230-020\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{host}}/api/workers/address/63ebd2a6e809a78cdfccf94b/63ebd214131404c8a71e5a5a",
-									"host": [
-										"{{host}}"
-									],
-									"path": [
-										"api",
-										"workers",
-										"address",
-										"63ebd2a6e809a78cdfccf94b",
-										"63ebd214131404c8a71e5a5a"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
 				{
 					"name": "create",
 					"request": {
@@ -123,7 +60,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/api/users/id/642344ae22856f3c88b9e858",
+							"raw": "{{host}}/api/users/id/6423476ffd8cbef6c41012c7",
 							"host": [
 								"{{host}}"
 							],
@@ -131,7 +68,7 @@
 								"api",
 								"users",
 								"id",
-								"642344ae22856f3c88b9e858"
+								"6423476ffd8cbef6c41012c7"
 							]
 						}
 					},
@@ -143,15 +80,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/api/workers/cpf/392.232.222-01",
+							"raw": "{{host}}/api/users/cpf/45177620840",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"workers",
+								"users",
 								"cpf",
-								"392.232.222-01"
+								"45177620840"
 							]
 						}
 					},
@@ -163,15 +100,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/api/workers/name/VI",
+							"raw": "{{host}}/api/users/name/Rodrigo",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"workers",
+								"users",
 								"name",
-								"VI"
+								"Rodrigo"
 							]
 						}
 					},
@@ -183,14 +120,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/api/users/642344ae22856f3c88b9e858",
+							"raw": "{{host}}/api/users/6423476ffd8cbef6c41012c7",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"users",
-								"642344ae22856f3c88b9e858"
+								"6423476ffd8cbef6c41012c7"
 							]
 						}
 					},
@@ -203,7 +140,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"ANTÔNIO VIEIRA\",\r\n    \"code\":\"1234\",\r\n    \"status\":\"ATIVO\",\r\n    \"role\":\"EVANGELISTA\",\r\n    \"rg\":\"39383839-2\",\r\n    \"cpf\":\"392.232.222-01\",\r\n    \"birth\": \"2023-01-30T23:10:50Z\",\r\n    \"consagration\":\"2023-01-30T23:10:50Z\",\r\n    \"phoneNumber\":\"11959943034\",\r\n    \"email\":\"rb.bergamin@gmail.com\",\r\n    \"photo\":\"https://aws.s3.storage/1234/photo\",\r\n    \"address\": {\r\n        \"type\":\"Residencial\",\r\n        \"place\": \"Rua Itaperuã\",\r\n        \"number\": \"1038\",\r\n        \"complement\":null,\r\n        \"district\": \"Vila Taquari\",\r\n        \"city\": \"São Paulo\",\r\n        \"state\": \"São Paulo\",\r\n        \"zip_code\":\"08230-020\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"name\":\"Rodrigo Bergamin Guimarães da Silva\",\r\n    \"type\":\"MEMBRO\",\r\n    \"rg\":\"532456063\",\r\n    \"cpf\":\"45177620840\",\r\n    \"birth\":\"2023-01-30T23:10:50Z\",\r\n    \"phoneNumber\": \"11959933035\",\r\n    \"email\":\"rb.bergamin@gmail.com\",\r\n    \"address\": {\r\n        \"place\":\"Rua Francisco Rodrigues Seckler, 112\",\r\n        \"complement\": \"81B\",\r\n        \"district\":\"Itaquera\",\r\n        \"city\":\"São Paulo\",\r\n        \"state\":\"São Paulo\",\r\n        \"zip_code\":\"08230-020\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -211,14 +148,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/api/workers/63e53f101c33ea0e065cc35d",
+							"raw": "{{host}}/api/users/6423476ffd8cbef6c41012c7",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
-								"workers",
-								"63e53f101c33ea0e065cc35d"
+								"users",
+								"6423476ffd8cbef6c41012c7"
 							]
 						}
 					},

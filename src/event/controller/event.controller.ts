@@ -3,12 +3,14 @@ import { Controller, Get, Put, Delete, Param, NotFoundException, Post, UsePipes,
 import { Event } from '@prisma/client';
 import { UserValidationExistPipe } from 'src/user/pipes/UserValidationPipe';
 import { CreateEventDTO } from '../dto/event/CreateEventDTO';
-import { UpdateEventDTO } from '../dto/UpdateEventDTO';
+
 import { EventValidationExistPipe } from '../pipes/event/EventValidationPipe';
-import { UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common/decorators';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { UploadedFile, UseInterceptors } from '@nestjs/common/decorators';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import { TicketValidationAlreadyExistPipe, TicketValidationExistPipe } from '../pipes/ticket/TicketValidationPipe';
+import { CreateTicketDTO } from '../dto/ticket/CreateTicketDTO';
+import { UpdateEventDTO } from '../dto/event/UpdateEventDTO';
+import { UpdateTicketDTO } from '../dto/ticket/UpdateTicketDTO';
 
 @Controller('api/events')
 export class EventController {
@@ -92,13 +94,32 @@ export class EventController {
 
     /*CREATE TICKET*/
 
-    @Post()
+    @Post('ticket')
       @UsePipes(ValidationPipe, TicketValidationAlreadyExistPipe)
           async createTicket( 
-              @Body() data: CreateEventDTO, eventId: string): Promise<void>{
+              @Body() data: CreateTicketDTO, eventId: string): Promise<void>{
                   
                  await this.eventService.createTicket(data, eventId)
                         
           }
       
+
+    /*UPDATE EVENT*/
+          @Put('ticket/:id')
+          @UsePipes(ValidationPipe)
+          async updateTicket(
+                @Param('ticketId', TicketValidationExistPipe) ticketId: string, 
+                @Body() data: UpdateTicketDTO): Promise<void>{
+                     await this.eventService.updateTicket(data, ticketId)
+              }
+          
+          
+    /*DELETE EVENT*/
+          @Delete('ticket/:id')
+          async deleteTicket(
+              @Param('id', TicketValidationExistPipe) id : string): Promise<void> {
+                
+                  await this.eventService.deleteTicket(id)
+              }
+          
 }

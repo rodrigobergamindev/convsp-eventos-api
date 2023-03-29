@@ -23,5 +23,5 @@ export class CreateTicketDTO implements Prisma.TicketCreateInput {
     @IsNotEmpty()
     readonly quantity: number;
 
-
+    
 }

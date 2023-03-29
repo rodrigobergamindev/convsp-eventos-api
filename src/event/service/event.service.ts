@@ -320,13 +320,13 @@ export class EventService {
        /*UPDATE*/
 
        async updateTicket(data: UpdateTicketDTO, 
-        eventId: string): Promise<Ticket> {
+        ticketId: string): Promise<void> {
 
         try {
     
         const ticket = await this.prisma.ticket.update({
           where: {
-            id: eventId
+            id: ticketId
           }
           ,
           data: {
@@ -334,7 +334,31 @@ export class EventService {
             }
           })
            
-          return ticket
+         
+  
+        } catch (error) { 
+            if(error){
+              throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
+            }
+          
+        }
+      
+          
+       }
+
+
+       /*DELETE*/
+       async deleteTicket( 
+        ticketId: string): Promise<void> {
+
+        try {
+    
+        const deleteTicket = await this.prisma.ticket.delete({
+          where: {
+            id: ticketId
+          }
+          })
+           
   
         } catch (error) { 
             if(error){

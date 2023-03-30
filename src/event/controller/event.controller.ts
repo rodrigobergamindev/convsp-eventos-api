@@ -1,6 +1,6 @@
 import { EventService } from './../service/event.service';
 import { Controller, Get, Put, Delete, Param, NotFoundException, Post, UsePipes, ValidationPipe, Body } from '@nestjs/common';
-import { Event } from '@prisma/client';
+import { Event, Subscription } from '@prisma/client';
 import { UserValidationExistPipe } from 'src/user/pipes/UserValidationPipe';
 import { CreateEventDTO } from '../dto/event/CreateEventDTO';
 
@@ -121,5 +121,56 @@ export class EventController {
                 
                   await this.eventService.deleteTicket(id)
               }
-          
-}
+    
+              
+     /*CREATE SUBSCRIPTION*/
+     
+     @Post('subscription/:ticketId/:userId')
+      @UsePipes(ValidationPipe)
+          async createSubscription( 
+                @Param('ticketId', TicketValidationExistPipe) ticketId: string,
+                @Param('userId', UserValidationExistPipe) userId: string
+             ): Promise<void>{
+                
+                  await this.eventService.createSubscription(ticketId, userId)
+                        
+             }
+
+    
+    /*FIND SUBSCRIPTION*/
+
+
+    @Get()
+    async getSubscriptions(): Promise<Subscription[]>{
+        const subscriptions = await this.eventService.findAllSubscriptions();
+        return subscriptions
+    }
+
+    @Get('id/:id')
+    async getSubscriptionById(
+        @Param('id') id : string): Promise<Subscription> {
+            const subscription = await this.eventService.findSubscriptionById(id)
+            if(!subscription) throw new NotFoundException({statusCode: 404, message: "Subscription Not Found"})
+            return subscription
+        }  
+
+    
+    /*CREATE PAYMENT*/
+
+    @Post('subscription/payment')
+    @UsePipes(ValidationPipe)
+        async createPayment( 
+            @Body() data: any
+           ): Promise<void>{
+                return await this.eventService.createPayment(data)
+                       
+           }
+
+    @Post('subscription/payment/status')
+            async paymentStatus( 
+                   @Body() data: any
+                  ): Promise<void>{
+                       console.log(data)
+                             
+                  }
+            }

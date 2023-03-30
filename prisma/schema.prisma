@@ -35,7 +35,7 @@ model Ticket {
   description String
   price Float
   quantity Int
-  total Int
+  partners Int
   subscription Subscription[]
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt
@@ -47,7 +47,6 @@ model Ticket {
 
 model Subscription {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
-  code String @unique
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @db.ObjectId
   ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -56,6 +55,8 @@ model Subscription {
   parter Partner[]
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt
+
+  @@unique([userId, ticketId])
 }
 
 model Payment {

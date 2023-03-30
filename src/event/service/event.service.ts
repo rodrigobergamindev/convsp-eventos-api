@@ -8,6 +8,7 @@ import { S3 } from "aws-sdk";
 import { UpdateEventDTO } from '../dto/event/UpdateEventDTO';
 import { CreateTicketDTO } from '../dto/ticket/CreateTicketDTO';
 import { UpdateTicketDTO } from '../dto/ticket/UpdateTicketDTO';
+import { CreateSubscriptionDTO } from '../dto/subscription/CreateSubscriptionDTO';
 
 @Injectable()
 export class EventService {
@@ -290,7 +291,7 @@ export class EventService {
       }
 
 
-      /*CREATE*/
+      /*CREATE TICKET*/
 
       async createTicket(data: CreateTicketDTO, eventId: string): Promise<void> {
 
@@ -317,7 +318,7 @@ export class EventService {
           
        }
 
-       /*UPDATE*/
+       /*UPDATE TICKET*/
 
        async updateTicket(data: UpdateTicketDTO, 
         ticketId: string): Promise<void> {
@@ -347,7 +348,7 @@ export class EventService {
        }
 
 
-       /*DELETE*/
+       /*DELETE TICKET*/
        async deleteTicket( 
         ticketId: string): Promise<void> {
 
@@ -359,6 +360,42 @@ export class EventService {
           }
           })
            
+  
+        } catch (error) { 
+            if(error){
+              throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
+            }
+          
+        }
+      
+          
+       }
+
+
+       /*SUBSCRIPTION*/
+
+
+       /*CREATE SUBSCRIPTION*/
+
+       async createSubscription(data: CreateSubscriptionDTO, ticketId: string, userId:string): Promise<void> {
+
+        try {
+    
+        const subscription = await this.prisma.subscription.create({
+          data: {
+            ...data,
+            ticket: {
+              connect: {
+                id: ticketId
+              }
+            },
+            user: {
+              connect: {
+                id: userId
+              }
+            }
+            }
+          })
   
         } catch (error) { 
             if(error){

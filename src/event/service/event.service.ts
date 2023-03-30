@@ -1,6 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Event, EventAddress, Prisma, PrismaService, Ticket } from 'src/prisma/module';
+import { Event, EventAddress, Prisma, PrismaService, Subscription, Ticket } from 'src/prisma/module';
 import { CreateEventDTO } from '../dto/event/CreateEventDTO';
 
 import {v4 as uuid} from 'uuid'
@@ -9,6 +9,7 @@ import { UpdateEventDTO } from '../dto/event/UpdateEventDTO';
 import { CreateTicketDTO } from '../dto/ticket/CreateTicketDTO';
 import { UpdateTicketDTO } from '../dto/ticket/UpdateTicketDTO';
 import { CreateSubscriptionDTO } from '../dto/subscription/CreateSubscriptionDTO';
+import { CreatePartnerDTO } from '../dto/subscription/CreatePartnerDTO';
 
 @Injectable()
 export class EventService {
@@ -406,4 +407,65 @@ export class EventService {
           
        }
 
+       /*FIND*/
+
+       async findSubscriptionById(id: string): Promise<Subscription> {
+        try {
+    
+          const subscription = await this.prisma.subscription.findUnique({
+            where: {
+              id
+            }
+          })
+          return subscription
+    
+          } catch (error) { 
+              if(error){
+                throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
+              }
+            
+          }
+       }
+
+       async findAllSubscriptions(): Promise<Subscription[]> {
+
+        try {
+    
+          const subscriptions = await this.prisma.subscription.findMany()
+          
+          return subscriptions
+    
+          } catch (error) { 
+              if(error){
+                throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
+              }
+            
+          }
+       }
+
+
+       /*CREATE PARTNER*/
+
+       async createPartner(data: CreatePartnerDTO, subscriptionId: string): Promise<void> {
+
+        try {
+    
+          const partner = await this.prisma.partner.create({
+            data: {
+              ...data,
+              subscription: {
+                connect: {
+                  id: subscriptionId
+                }
+              }
+              }
+            })
+    
+          } catch (error) { 
+              if(error){
+                throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
+              }
+            
+          }
+       }
 }

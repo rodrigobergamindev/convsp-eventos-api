@@ -377,13 +377,12 @@ export class EventService {
 
        /*CREATE SUBSCRIPTION*/
 
-       async createSubscription(data: CreateSubscriptionDTO, ticketId: string, userId:string): Promise<void> {
+       async createSubscription(ticketId: string, userId:string): Promise<void> {
 
         try {
     
         const subscription = await this.prisma.subscription.create({
           data: {
-            ...data,
             ticket: {
               connect: {
                 id: ticketId

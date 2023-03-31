@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d96e4a06-d293-4d72-865e-ccc7cb689cac",
+		"_postman_id": "d0d0ebca-6804-4f20-8999-7a3e8116e4d4",
 		"name": "convsp-eventos-backend",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -175,7 +175,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"title\": \"QUARTO CASAL\",\r\n    \"description\": \"QUARTO SOMENTE PARA CASAL\",\r\n    \"price\":750.5,\r\n    \"quantity\":250\r\n}",
+									"raw": "{\r\n    \"title\": \"QUARTO CASAL\",\r\n    \"description\": \"QUARTO SOMENTE PARA CASAL\",\r\n    \"price\":750.5,\r\n    \"quantity\":250,\r\n    \"partners\":0\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -305,6 +305,87 @@
 										"events",
 										"64247831f1bface9fa74e25c",
 										"deleteFile"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "subscription",
+					"item": [
+						{
+							"name": "create Subscription",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/events/subscription/642598d9b9dd7f8ffaa47332/642390672eefb176fe787402",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"events",
+										"subscription",
+										"642598d9b9dd7f8ffaa47332",
+										"642390672eefb176fe787402"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "payment",
+					"item": [
+						{
+							"name": "createPayment",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"category_id\":\"other_tickets\",\r\n    \"quantity\":1,\r\n    \"description\":\"INSCRIÇÃO PARA DE QUARTO CASAL\",\r\n    \"price\":1450.5,\r\n    \"title\":\"CASAL\",\r\n    \"name\":\"Rodrigo Bergamin Guimarães da Silva\",\r\n    \"area_code\":\"11\",\r\n    \"number\":959943034,\r\n    \"email\":\"rb.bergamin@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/events/subscription/payment",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"events",
+										"subscription",
+										"payment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updatePaymentStatus",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/api/events/subscription/payment/status",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"events",
+										"subscription",
+										"payment",
+										"status"
 									]
 								}
 							},

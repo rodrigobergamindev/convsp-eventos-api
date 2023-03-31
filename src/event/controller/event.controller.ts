@@ -168,7 +168,7 @@ export class EventController {
 
     @Post('subscription/payment/status')
             async paymentStatus( 
-                   @Body() data: any
+                  
                   ): Promise<void>{
                        return await this.eventService.updatePaymentStatus()
                              

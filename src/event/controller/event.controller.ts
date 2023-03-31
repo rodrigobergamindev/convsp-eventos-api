@@ -170,7 +170,7 @@ export class EventController {
             async paymentStatus( 
                    @Body() data: any
                   ): Promise<void>{
-                       console.log(data)
+                       return await this.eventService.updatePaymentStatus()
                              
                   }
             }

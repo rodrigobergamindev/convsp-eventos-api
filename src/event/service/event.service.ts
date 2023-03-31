@@ -480,13 +480,27 @@ export class EventService {
 
        async createPayment(data: any): Promise<void> {
           try {
-
             console.log(data)
+            const createPayment = await payment.save({
+              ...data,
+              notification_url: 'https://webhook.site/e1f65eed-d1e6-4b27-8193-6498412ad120'
+            })
+          
             
           } catch (error) {
             if(error){
               throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)
             }
           }
+       }
+
+       async updatePaymentStatus(): Promise<void> {
+        const updatePayment = await payment.update({
+          id: 1312388436,
+          status: 'approved'
+        })
+
+        console.log(updatePayment.response)
+
        }
 }

@@ -10,7 +10,7 @@ import { CreateTicketDTO } from '../dto/ticket/CreateTicketDTO';
 import { UpdateTicketDTO } from '../dto/ticket/UpdateTicketDTO';
 import { CreateSubscriptionDTO } from '../dto/subscription/CreateSubscriptionDTO';
 import { CreatePartnerDTO } from '../dto/subscription/CreatePartnerDTO';
-import {payment,configurations, preferences, customers, configure} from 'mercadopago'
+import {payment,configurations, preferences, customers, configure, card_token, card} from 'mercadopago'
 
 const mercadopagoConfig = configure({
   access_token: process.env.MERCADOPAGO_ACCESS_KEY
@@ -480,32 +480,9 @@ export class EventService {
 
        async createPayment(data: any): Promise<void> {
           try {
-        
-            const createPayment = await payment.create({
-              installments: 10,
-              transaction_amount: 1450.5,
-              description: "Payment for product",
-              payment_method_id: "visa",
-              token: "ff8080814c11e237014c1ff593b57b4d",
-              additional_info: {
-                items: [
-                  {
-                    title: "Point Mini",
-                    description: "Producto Point para cobros con tarjetas mediante bluetooth",
-                    category_id: "other_tickets",
-                    quantity: 1,
-                    unit_price: 1450.5
 
-                  }
-                ]
-              },
-              payer: {
-                email: 'test@test.com.br',
-              } 
-
-            }) 
-
-            console.log(await createPayment.response)
+            console.log(data)
+            
           } catch (error) {
             if(error){
               throw new HttpException(`${error}`, HttpStatus.BAD_REQUEST)

@@ -10,7 +10,8 @@ import { CreateTicketDTO } from '../dto/ticket/CreateTicketDTO';
 import { UpdateTicketDTO } from '../dto/ticket/UpdateTicketDTO';
 import { CreateSubscriptionDTO } from '../dto/subscription/CreateSubscriptionDTO';
 import { CreatePartnerDTO } from '../dto/subscription/CreatePartnerDTO';
-import {payment,configurations, preferences, customers, configure, card_token, card} from 'mercadopago'
+import {payment as pay,configurations, preferences, customers, configure, card_token, card} from 'mercadopago'
+import { HttpService } from '@nestjs/axios/dist';
 
 const mercadopagoConfig = configure({
   access_token: process.env.MERCADOPAGO_ACCESS_KEY
@@ -19,7 +20,9 @@ const mercadopagoConfig = configure({
 @Injectable()
 export class EventService {
     constructor(private readonly prisma: PrismaService, 
-        private readonly configService: ConfigService) {}
+        private readonly configService: ConfigService,
+        private readonly httpService: HttpService
+        ) {}
 
 
     /**FIND */
@@ -480,11 +483,13 @@ export class EventService {
 
        async createPayment(data: any): Promise<void> {
           try {
-            console.log(data)
-            const createPayment = await payment.save({
+           
+            const createPayment = await pay.create({
               ...data,
-              notification_url: 'https://webhook.site/e1f65eed-d1e6-4b27-8193-6498412ad120'
-            })
+              notification_url: 'https://webhook.site/e8aa0e23-f165-46c7-8276-42862c459fb3'
+            }) 
+
+            console.log(createPayment.response)
           
             
           } catch (error) {
@@ -495,12 +500,23 @@ export class EventService {
        }
 
        async updatePaymentStatus(): Promise<void> {
-        const updatePayment = await payment.update({
-          id: 1312388436,
-          status: 'approved'
+        console.log('bateu aqui')
+
+  
+       
+        const updatePay = await pay.update({
+          id: 1312408462,
+          status:'approved'
+        }, {
+          headers: {
+            ['Authorization']: 'Bearer TEST-2624610147583757-040214-d765e0aa2907c8b123fa523ef8d5039c-225097055',
+            ['Content-Type']: 'application/json'
+          },
+          
         })
 
-        console.log(updatePayment.response)
-
+        
+        console.log(updatePay)
+        
        }
 }

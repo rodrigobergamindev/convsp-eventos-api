@@ -124,29 +124,28 @@ export class EventController {
     
               
      /*CREATE SUBSCRIPTION*/
-     
+              
      @Post('subscription/:ticketId/:userId')
-      @UsePipes(ValidationPipe)
-          async createSubscription( 
-                @Param('ticketId', TicketValidationExistPipe) ticketId: string,
-                @Param('userId', UserValidationExistPipe) userId: string
-             ): Promise<void>{
-                
-                  await this.eventService.createSubscription(ticketId, userId)
-                        
-             }
-
+     @UsePipes(ValidationPipe)
+         async createSubscription( 
+               @Param('ticketId', TicketValidationExistPipe) ticketId: string,
+               @Param('userId', UserValidationExistPipe) userId: string
+            ): Promise<void>{
+               
+                 await this.eventService.createSubscription(ticketId, userId)
+                       
+            }
     
     /*FIND SUBSCRIPTION*/
 
 
-    @Get()
+    @Get('subscriptions')
     async getSubscriptions(): Promise<Subscription[]>{
         const subscriptions = await this.eventService.findAllSubscriptions();
         return subscriptions
     }
 
-    @Get('id/:id')
+    @Get('subscription/:id')
     async getSubscriptionById(
         @Param('id') id : string): Promise<Subscription> {
             const subscription = await this.eventService.findSubscriptionById(id)
@@ -162,13 +161,13 @@ export class EventController {
         async createPayment( 
             @Body() data: any
            ): Promise<void>{
+            
                 return await this.eventService.createPayment(data)
                        
            }
 
-    @Post('subscription/payment/status')
+    @Post('payment/status')
             async paymentStatus( 
-                  
                   ): Promise<void>{
                        return await this.eventService.updatePaymentStatus()
                              

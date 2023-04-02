@@ -486,8 +486,10 @@ export class EventService {
            
             const createPayment = await pay.create({
               ...data,
-              notification_url: 'https://webhook.site/e8aa0e23-f165-46c7-8276-42862c459fb3'
-            }) 
+              capture: true,
+              notification_url: 'https://webhook.site/8ade31c2-2817-4100-8b74-e910a097cc8c'
+            }
+            ) 
 
             console.log(createPayment.response)
           
@@ -505,11 +507,11 @@ export class EventService {
   
        
         const updatePay = await pay.update({
-          id: 1312408462,
+          id: 1313776927,
           status:'approved'
         }, {
           headers: {
-            ['Authorization']: 'Bearer TEST-2624610147583757-040214-d765e0aa2907c8b123fa523ef8d5039c-225097055',
+            ['Authorization']: 'Bearer TEST-848bd8c1-5036-42a8-9318-b5371b5d539f',
             ['Content-Type']: 'application/json'
           },
           

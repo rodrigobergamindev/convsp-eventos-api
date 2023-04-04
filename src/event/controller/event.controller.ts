@@ -157,11 +157,9 @@ export class EventController {
     /*CREATE PAYMENT*/
 
     @Post('subscription/payment')
-    @UsePipes(ValidationPipe)
         async createPayment( 
             @Body() data: any
            ): Promise<void>{
-            
                 return await this.eventService.createPayment(data)
                        
            }

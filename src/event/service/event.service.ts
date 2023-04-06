@@ -503,17 +503,23 @@ export class EventService {
        }
 
        async updatePaymentStatus(): Promise<void> {
-        console.log('bateu aqui')
+       
 
   
        
         const updatePay = await pay.update({
-          id: 1313818729,
-          status:'approved'
-        })
+          id:1312466452,
+          status: 'approved'
+        },
+        {
+          headers: {
+            ['Authorization']:'Bearer TEST-2624610147583757-040214-d765e0aa2907c8b123fa523ef8d5039c-225097055'
+          }
+        }
+        )
 
         
-        console.log(updatePay.body)
+        
         
        }
 }

@@ -163,7 +163,7 @@ export class EventController {
                 return await this.eventService.createPayment(data)
                        
            }
-
+ 
     @Post('payment/status')
             async paymentStatus( 
                   ): Promise<void>{
